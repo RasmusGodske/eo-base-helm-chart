@@ -1,3 +1,5 @@
+{{- if .Values.ingress }}
+
 {{- $matchRules := list }}
 
 {{- if .Values.ingress.hosts }}
@@ -38,3 +40,4 @@ spec:
       - name: {{ . }}
       {{- end }}
     {{- end }}
+{{- end }}

@@ -1,3 +1,4 @@
+{{- if .Values.middleware }}
 {{- if .Values.middleware.stripPrefix }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
@@ -7,4 +8,5 @@ spec:
   stripPrefix:
     prefixes:
       {{- toYaml .Values.middleware.stripPrefix.prefixes | nindent 6 }}
+{{- end }}
 {{- end }}
