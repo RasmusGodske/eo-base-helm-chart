@@ -1,0 +1,40 @@
+{{- $matchRules := list }}
+
+{{- if .Values.ingress.hosts }}
+  {{- $hostsMatchRules := list }}
+  {{- range .Values.ingress.hosts }}
+    {{- $hostsMatchRules = append $hostsMatchRules (printf "Host(`%s`)" . ) }}
+  {{- end}}
+  {{- $matchRules = append $matchRules (printf "(%s)" (join " || " $hostsMatchRules)) }}
+{{- end}}
+
+{{- if .Values.ingress.paths }}
+  {{- $pathsMatchRules := list }}
+  {{- range .Values.ingress.paths }}
+    {{- $pathsMatchRules = append $pathsMatchRules (printf "PathPrefix(`%s`)" . ) }}
+  {{- end}}
+  {{- $matchRules = append $matchRules (printf "(%s)" (join " || " $pathsMatchRules)) }}
+{{- end}}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "ett-base-helm-chart.fullname" . }}
+  labels:
+    {{- include "ett-base-helm-chart.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+  - match: {{join " && " $matchRules}}
+    kind: Rule
+    services:
+    - name: {{ include "ett-base-helm-chart.fullname" . }}
+      port: {{ .Values.ingress.servicePort }}
+    {{- if .Values.ingress.middlewares }}
+    middlewares:
+      {{- range .Values.ingress.middlewares }}
+      - name: {{ . }}
+      {{- end }}
+    {{- end }}
