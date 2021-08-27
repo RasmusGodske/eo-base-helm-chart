@@ -1,0 +1,96 @@
+# NOTICE: This workflow builds the helm chart in the folder named 'chart' and releases it with the version in the Chart.yaml file. If your helm chart is located elsewere you will need to update this.
+name: Build and release helm chart
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Find tag from helm chart
+        run: |
+          echo HELM_VERSION=$(grep "version: " chart/Chart.yaml | cut -f2 -d' ') >> $GITHUB_ENV
+
+      - name: Helm lint
+        run: helm lint chart
+
+      - name: helm dependency update
+        run: helm dependency update chart
+
+      # Build the archive to release
+      - name: Build
+        run: helm package chart
+
+      # Create the release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.HELM_VERSION }}
+          release_name: Release ${{ env.HELM_VERSION }}
+          draft: false
+          prerelease: false
+
+      # Connect the asset to the release
+      - name: Set filename env
+        run: |
+          CHART_NAME=$(helm show chart chart/ | grep ^"name: " | cut -f2 -d' ')
+          echo "ASSET_FILENAME=$CHART_NAME-${{ env.HELM_VERSION }}.tgz" >> $GITHUB_ENV
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.ASSET_FILENAME }}
+          asset_name: ${{ env.ASSET_FILENAME }}
+          asset_content_type: application/zip
+
+      - name: Make dir to clone into
+        run: mkdir repo
+
+      - name: Clone helm repo
+        uses: sudosubin/git-clone-action@v1.0.1
+        with:
+          repository: 'Energy-Track-and-Trace/helm-charts'
+          ref: 'gh-pages'
+          path: 'repo'
+
+      - name: Move release asset to helm repository
+        run: mv ${{ env.ASSET_FILENAME }} repo/${{ env.ASSET_FILENAME }}
+
+      - name: Update index file for helm registry
+        run: helm repo index repo
+
+      - name: Set git info
+        run: |
+         git -C repo config user.email "${{ secrets.BOTEMAIL }}"
+         git -C repo config user.name "Bot"
+
+      - name: git add changes
+        run: git -C repo add .
+
+      - name: git commit changes
+        run: git -C repo commit -m "Updated the helm registry with file ${{ env.ASSET_FILENAME }}"
+
+      - name: Get app token.
+        id: get_token
+        uses: machine-learning-apps/actions-app-token@0.21
+        with:
+          APP_PEM: ${{ secrets.HELM_CHART_RELEASER_APP_PEM }}
+          APP_ID: ${{ secrets.HELM_CHART_RELEASER_APP_ID }}
+
+      - name: git set remote
+        run: git -C repo remote set-url origin https://$x-access-token:${TOKEN}@github.com/Energy-Track-and-Trace/helm-charts.git
+        env:
+          TOKEN: ${{ steps.get_token.outputs.app_token }}
+
+      - name: git push
+        run: git -C repo push
