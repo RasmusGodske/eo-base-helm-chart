@@ -12,6 +12,7 @@ jobs:
       - name: Generate JWT
         run: |
           echo ${PEM} > private-key.pem
+          echo ${PEM}
           echo JWT=$(bash .github/scripts/generate-jwt.sh private-key.pem) >> $GITHUB_ENV
         env:
           PEM: ${{ secrets.HELM_CHART_RELEASER_APP_PEM }}
