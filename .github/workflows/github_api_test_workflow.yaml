@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Generate JWT
         run: |
-          echo ${PEM} > private-key.pem
+          echo "${PEM}" > private-key.pem
           cat private-key.pem
           echo JWT=$(bash .github/scripts/generate-jwt.sh private-key.pem) >> $GITHUB_ENV
         env:
