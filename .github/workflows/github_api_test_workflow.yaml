@@ -17,10 +17,19 @@ jobs:
           PEM: ${{ secrets.HELM_CHART_RELEASER_APP_PEM }}
       - name: get token
         run: |
-          curl -s -i -X POST \
+          echo TOKEN=$(curl -s -X POST \
             -H "Authorization: Bearer ${JWT}" \
             -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/app/installations/${INST_ID}/access_tokens
+            https://api.github.com/app/installations/${INST_ID}/access_tokens \
+            | jq -r ".token") >> $GITHUB_ENV
         env:
           JWT: ${{ env.JWT }}
           INST_ID: ${{ secrets.HELM_CHART_RELEASER_INSTALATION_ID }}
+      - name: Test token
+        run: |
+          curl -s \
+          -H "Authorization: token ${TOKEN}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/installation/repositories
+        env:
+          TOKEN: ${{ env.TOKEN }}

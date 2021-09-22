@@ -43,13 +43,13 @@ json() {
 sha256_sign()
 {
     declare input=${1:-$(</dev/stdin)}
-    printf '%s' "${input}" | openssl dgst -binary -sha256 -sign "${secret}"
+    printf '%s' "${input}" | openssl dgst -binary -sha256 -sign "${secret}" | base64 | tr -d '=' | tr '/+' '_-' | tr -d '\n'
 }
 
 header_base64=$(echo "${header}" | json | base64_encode)
 payload_base64=$(echo "${payload}" | json | base64_encode)
 
 header_payload=$(echo "${header_base64}.${payload_base64}")
-signature=$(echo "${header_payload}" | sha256_sign | base64_encode)
+signature=$(echo "${header_payload}" | sha256_sign )
 
 echo "${header_payload}.${signature}"
