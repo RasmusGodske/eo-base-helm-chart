@@ -6,6 +6,13 @@ metadata:
   labels:
     {{- include "ett-base-helm-chart.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.service.proxy }}
+  type: ExternalName
+  externalName: {{ .Values.service.proxy.host }}
+  ports:
+    - port: {{ .Values.service.proxy.port }}
+      protocol: TCP
+  {{- else }}
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
@@ -15,4 +22,5 @@ spec:
   selector:
     {{- include "ett-base-helm-chart.selectorLabels" . | nindent 4 }}
     component: {{ .Values.service.deployment }}
+  {{- end }}
 {{- end }}

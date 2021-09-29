@@ -80,17 +80,27 @@ jobs:
       - name: git commit changes
         run: git -C repo commit -m "Updated the helm registry with file ${{ env.ASSET_FILENAME }}"
 
-      - name: Get app token.
-        id: get_token
-        uses: machine-learning-apps/actions-app-token@0.21
-        with:
-          APP_PEM: ${{ secrets.HELM_CHART_RELEASER_APP_PEM }}
-          APP_ID: ${{ secrets.HELM_CHART_RELEASER_APP_ID }}
+      - name: Generate JWT
+        run: |
+          echo "${PEM}" > private-key.pem
+          echo JWT=$(bash .github/scripts/generate-jwt.sh private-key.pem) >> $GITHUB_ENV
+        env:
+          PEM: ${{ secrets.HELM_CHART_RELEASER_APP_PEM }}
+      - name: Get token
+        run: |
+          echo TOKEN=$(curl -s -X POST \
+            -H "Authorization: Bearer ${JWT}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/app/installations/${INST_ID}/access_tokens \
+            | jq -r ".token") >> $GITHUB_ENV
+        env:
+          JWT: ${{ env.JWT }}
+          INST_ID: ${{ secrets.HELM_CHART_RELEASER_INSTALATION_ID }}
 
       - name: git set remote
         run: git -C repo remote set-url origin https://$x-access-token:${TOKEN}@github.com/Energy-Track-and-Trace/helm-charts.git
         env:
-          TOKEN: ${{ steps.get_token.outputs.app_token }}
+          TOKEN: ${{ env.TOKEN }}
 
       - name: git push
         run: git -C repo push
