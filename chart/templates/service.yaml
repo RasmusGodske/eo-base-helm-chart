@@ -35,7 +35,8 @@ subsets:
   - addresses:
       - ip: {{ .Values.service.proxy.host }}
     ports:
-      - port: {{ .Values.service.proxy.port }}
+      - port: {{ .Values.service.port }}
+        targetPort: {{ .Values.service.proxy.port }}
         protocol: TCP
         name: http
 {{- end }}
