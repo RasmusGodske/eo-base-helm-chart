@@ -6,15 +6,14 @@ metadata:
   labels:
     {{- include "ett-base-helm-chart.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.service.type }}
   {{- if .Values.service.proxy }}
-  type: ExternalName
-  externalName: {{ .Values.service.proxy.host }}
+  clusterIP: None
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.proxy.port }}
       protocol: TCP
   {{- else }}
-  type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
@@ -24,4 +23,20 @@ spec:
     {{- include "ett-base-helm-chart.selectorLabels" . | nindent 4 }}
     component: {{ .Values.service.deployment }}
   {{- end }}
+{{- end }}
+{{- if .Values.service.proxy }}
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: {{ include "ett-base-helm-chart.fullname" . }}
+  labels:
+    {{- include "ett-base-helm-chart.labels" . | nindent 4 }}
+subsets:
+  - addresses:
+      - ip: {{ .Values.service.proxy.host }}
+    ports:
+      - port: {{ .Values.service.proxy.port }}
+        protocol: TCP
+        name: http
 {{- end }}
