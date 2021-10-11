@@ -10,7 +10,8 @@ spec:
   type: ExternalName
   externalName: {{ .Values.service.proxy.host }}
   ports:
-    - port: {{ .Values.service.proxy.port }}
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.proxy.port }}
       protocol: TCP
   {{- else }}
   type: {{ .Values.service.type }}
