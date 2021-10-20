@@ -18,6 +18,14 @@
   {{- $matchRules = append $matchRules (printf "(%s)" (join " || " $pathsMatchRules)) }}
 {{- end}}
 
+{{- if .Values.ingress.pathExceptions }}
+  {{- $invertedPathsMatchRules := list }}
+  {{- range .Values.ingress.pathExceptions }}
+    {{- $invertedPathsMatchRules = append $invertedPathsMatchRules (printf "!PathPrefix(`%s`)" . ) }}
+  {{- end}}
+  {{- $matchRules = append $matchRules (printf "(%s)" (join " && " $invertedPathsMatchRules)) }}
+{{- end}}
+
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
