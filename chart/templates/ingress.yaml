@@ -21,9 +21,9 @@
 {{- if .Values.ingress.pathExceptions }}
   {{- $invertedPathsMatchRules := list }}
   {{- range .Values.ingress.pathExceptions }}
-    {{- $invertedPathsMatchRules = append $invertedPathsMatchRules (printf "!PathPrefix(`%s`)" . ) }}
+    {{- $invertedPathsMatchRules = append $invertedPathsMatchRules (printf "PathPrefix(`%s`)" . ) }}
   {{- end}}
-  {{- $matchRules = append $matchRules (printf "(%s)" (join " && " $invertedPathsMatchRules)) }}
+  {{- $matchRules = append $matchRules (printf "!(%s)" (join " || " $invertedPathsMatchRules)) }}
 {{- end}}
 
 apiVersion: traefik.containo.us/v1alpha1
