@@ -43,11 +43,19 @@ spec:
               path: /health
               port: http
           {{- end }}
-          {{- if .env}}
+          {{- if (or .env $.env) }}
           env:
+          {{- if $.env}}
+          {{- range $key, $value := $.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end}}
+          {{- end}}
+          {{- if .env}}
           {{- range $key, $value := .env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
+          {{- end}}
           {{- end}}
           {{- end}}
 {{- end }}
