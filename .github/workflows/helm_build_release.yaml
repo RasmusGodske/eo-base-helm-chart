@@ -3,7 +3,7 @@ name: Build and release helm chart
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, rename ]
 
 jobs:
   build:
@@ -53,54 +53,65 @@ jobs:
           asset_name: ${{ env.ASSET_FILENAME }}
           asset_content_type: application/zip
 
-      - name: Make dir to clone into
-        run: mkdir repo
-
-      - name: Clone helm repo
-        uses: sudosubin/git-clone-action@v1.0.1
-        with:
-          repository: 'Energinet-DataHub/helm-charts'
-          ref: 'gh-pages'
-          path: 'repo'
-
-      - name: Move release asset to helm repository
-        run: mv ${{ env.ASSET_FILENAME }} repo/${{ env.ASSET_FILENAME }}
-
-      - name: Update index file for helm registry
-        run: helm repo index repo
-
-      - name: Set git info
+      - name: Send event new release.
         run: |
-         git -C repo config user.email "${{ secrets.BOTEMAIL }}"
-         git -C repo config user.name "Bot"
+          curl -X POST https://api.github.com/repos/marcnuri-demo/actions-remote-dispatch-b/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACCESS_TOKEN }} \
+          --data '{"event_type": "ping", "client_payload": { 
+          "repository": "'"$GITHUB_REPOSITORY"'", 
+          "filename": "'"$ASSET_FILENAME"'",
+          "version": "'"$HELM_VERSION"'"
+          }}'
 
-      - name: git add changes
-        run: git -C repo add .
+      # - name: Make dir to clone into
+      #   run: mkdir repo
 
-      - name: git commit changes
-        run: git -C repo commit -m "Updated the helm registry with file ${{ env.ASSET_FILENAME }}"
+      # - name: Clone helm repo
+      #   uses: sudosubin/git-clone-action@v1.0.1
+      #   with:
+      #     repository: 'Energinet-DataHub/helm-charts'
+      #     ref: 'gh-pages'
+      #     path: 'repo'
 
-      - name: Generate JWT
-        run: |
-          echo "${PEM}" > private-key.pem
-          echo JWT=$(bash .github/scripts/generate-jwt.sh private-key.pem) >> $GITHUB_ENV
-        env:
-          PEM: ${{ secrets.HELM_CHART_RELEASER_APP_PEM }}
-      - name: Get token
-        run: |
-          echo TOKEN=$(curl -s -X POST \
-            -H "Authorization: Bearer ${JWT}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/app/installations/${INST_ID}/access_tokens \
-            | jq -r ".token") >> $GITHUB_ENV
-        env:
-          JWT: ${{ env.JWT }}
-          INST_ID: ${{ secrets.HELM_CHART_RELEASER_INSTALATION_ID }}
+      # - name: Move release asset to helm repository
+      #   run: mv ${{ env.ASSET_FILENAME }} repo/${{ env.ASSET_FILENAME }}
 
-      - name: git set remote
-        run: git -C repo remote set-url origin https://$x-access-token:${TOKEN}@github.com/energinet-datahub/helm-charts.git
-        env:
-          TOKEN: ${{ env.TOKEN }}
+      # - name: Update index file for helm registry
+      #   run: helm repo index repo
 
-      - name: git push
-        run: git -C repo push
+      # - name: Set git info
+      #   run: |
+      #    git -C repo config user.email "${{ secrets.BOT_EMAIL }}"
+      #    git -C repo config user.name "Bot"
+
+      # - name: git add changes
+      #   run: git -C repo add .
+
+      # - name: git commit changes
+      #   run: git -C repo commit -m "Updated the helm registry with file ${{ env.ASSET_FILENAME }}"
+
+      # - name: Generate JWT
+      #   run: |
+      #     echo "${PEM}" > private-key.pem
+      #     echo JWT=$(bash .github/scripts/generate-jwt.sh private-key.pem) >> $GITHUB_ENV
+      #   env:
+      #     PEM: ${{ secrets.HELM_CHART_RELEASER_APP_PEM }}
+      # - name: Get token
+      #   run: |
+      #     echo TOKEN=$(curl -s -X POST \
+      #       -H "Authorization: Bearer ${JWT}" \
+      #       -H "Accept: application/vnd.github.v3+json" \
+      #       https://api.github.com/app/installations/${INST_ID}/access_tokens \
+      #       | jq -r ".token") >> $GITHUB_ENV
+      #   env:
+      #     JWT: ${{ env.JWT }}
+      #     INST_ID: ${{ secrets.HELM_CHART_RELEASER_INSTALLATION_ID }}
+
+      # - name: git set remote
+      #   run: git -C repo remote set-url origin https://$x-access-token:${TOKEN}@github.com/energinet-datahub/helm-charts.git
+      #   env:
+      #     TOKEN: ${{ env.TOKEN }}
+
+      # - name: git push
+      #   run: git -C repo push
