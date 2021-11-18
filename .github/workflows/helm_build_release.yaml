@@ -59,7 +59,7 @@ jobs:
           -X POST https://api.github.com/repos/Energinet-DataHub/helm-charts/dispatches \
           -H 'Accept: application/vnd.github.v3+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
-          -d '{"event_type": "ping", "client_payload": {
+          -d '{"event_type": "new_chart", "client_payload": {
             "repository": "'"$GITHUB_REPOSITORY"'", 
             "filename": "'"$ASSET_FILENAME"'", 
             "version": "'"$HELM_VERSION"'"
