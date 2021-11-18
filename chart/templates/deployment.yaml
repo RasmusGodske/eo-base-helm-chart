@@ -3,20 +3,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ett-base-helm-chart.fullname" $ }}-{{ .name }}
+  name: {{ include "oe-base-helm-chart.fullname" $ }}-{{ .name }}
   labels:
-    {{- include "ett-base-helm-chart.labels" $ | nindent 4 }}
+    {{- include "oe-base-helm-chart.labels" $ | nindent 4 }}
     component: {{ .name }}
 spec:
   replicas: {{ .replicaCount }}
   selector:
     matchLabels:
-      {{- include "ett-base-helm-chart.selectorLabels" $ | nindent 6 }}
+      {{- include "oe-base-helm-chart.selectorLabels" $ | nindent 6 }}
       component: {{ .name }}
   template:
     metadata:
       labels:
-        {{- include "ett-base-helm-chart.selectorLabels" $ | nindent 8 }}
+        {{- include "oe-base-helm-chart.selectorLabels" $ | nindent 8 }}
         component: {{ .name }}
     spec:
       containers:
