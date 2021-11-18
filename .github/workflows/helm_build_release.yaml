@@ -55,7 +55,7 @@ jobs:
 
       - name: Send event new release.
         run: |
-          curl -X POST https://api.github.com/repos/marcnuri-demo/actions-remote-dispatch-b/dispatches \
+          curl -X POST https://api.github.com/repos/Energinet-DataHub/helm-charts/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
           --data '{"event_type": "ping", "client_payload": { 
