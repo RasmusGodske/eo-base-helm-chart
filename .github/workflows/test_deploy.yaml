@@ -3,7 +3,7 @@ name: Test the deployment of the base chart
 on: pull_request
 
 jobs:
-  test-loadbalancer:
+  test-base-chart:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,6 +12,6 @@ jobs:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.2.0
       - name: Install Chart
-        run: helm install base chart
+        run: helm install base chart -f test/values.yaml
       - name: Helm test chart
         run: helm test base --logs
