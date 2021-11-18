@@ -59,7 +59,7 @@ jobs:
       - name: Clone helm repo
         uses: sudosubin/git-clone-action@v1.0.1
         with:
-          repository: 'Energy-Track-and-Trace/helm-charts'
+          repository: 'Energinet-DataHub/helm-charts'
           ref: 'gh-pages'
           path: 'repo'
 
@@ -98,7 +98,7 @@ jobs:
           INST_ID: ${{ secrets.HELM_CHART_RELEASER_INSTALATION_ID }}
 
       - name: git set remote
-        run: git -C repo remote set-url origin https://$x-access-token:${TOKEN}@github.com/Energy-Track-and-Trace/helm-charts.git
+        run: git -C repo remote set-url origin https://$x-access-token:${TOKEN}@github.com/energinet-datahub/helm-charts.git
         env:
           TOKEN: ${{ env.TOKEN }}
 
