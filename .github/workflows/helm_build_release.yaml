@@ -3,7 +3,7 @@ name: Build and release helm chart
 
 on:
   push:
-    branches: [ main, rename ]
+    branches: [ main ]
 
 jobs:
   build:
