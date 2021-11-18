@@ -18,6 +18,8 @@ spec:
       labels:
         {{- include "ett-base-helm-chart.selectorLabels" $ | nindent 8 }}
         component: {{ .name }}
+      annotations:
+        {{- toYaml .annotations | nindent 8 }}
     spec:
       containers:
         - name: {{ $.Chart.Name }}-{{ .name }}
@@ -43,18 +45,27 @@ spec:
               path: /health
               port: http
           {{- end }}
-          {{- if (or .env $.env) }}
+          {{- if (or .env $.env $.envSecrets) }}
           env:
           {{- if $.env}}
-          {{- range $key, $value := $.env }}
-            - name: {{ $key }}
+          {{- range $name, $value := $.env }}
+            - name: {{ $name }}
               value: {{ $value | quote }}
           {{- end}}
           {{- end}}
           {{- if .env}}
-          {{- range $key, $value := .env }}
-            - name: {{ $key }}
+          {{- range $name, $value := .env }}
+            - name: {{ $name }}
               value: {{ $value | quote }}
+          {{- end}}
+          {{- end}}
+          {{- if $.envSecrets}}
+          {{- range $name, $value := $.envSecrets }}
+          - name: {{ $name }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $value.secretName }}
+                key: {{ $value.key }}
           {{- end}}
           {{- end}}
           {{- end}}
