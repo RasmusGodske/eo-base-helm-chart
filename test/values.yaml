@@ -9,7 +9,7 @@ deployments:
   - name: test
     replicaCount: 1
     command: "/bin/bash"
-    args: "[ $TEST_SECRET == test ]"
+    args: "[ ! -z $TEST_SECRET ] && [ $TEST_SECRET == test ]"
     env: {}
     annotations:
       "helm.sh/hook": test
