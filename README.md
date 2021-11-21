@@ -1,1 +1,1 @@
-# ett-base-helm-chart
+# eo-base-helm-chart

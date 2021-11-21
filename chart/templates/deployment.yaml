@@ -1,23 +1,23 @@
-{{- range .Values.deployments}}
+{{- range $key, $value := .Values.deployments}}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ett-base-helm-chart.fullname" $ }}-{{ .name }}
+  name: {{ include "eo-base-helm-chart.fullname" $ }}-{{ $key }}
   labels:
-    {{- include "ett-base-helm-chart.labels" $ | nindent 4 }}
-    component: {{ .name }}
+    {{- include "eo-base-helm-chart.labels" $ | nindent 4 }}
+    component: {{ $key }}
 spec:
-  replicas: {{ .replicaCount }}
+  replicas: {{ $value.replicaCount }}
   selector:
     matchLabels:
-      {{- include "ett-base-helm-chart.selectorLabels" $ | nindent 6 }}
-      component: {{ .name }}
+      {{- include "eo-base-helm-chart.selectorLabels" $ | nindent 6 }}
+      component: {{ $key }}
   template:
     metadata:
       labels:
-        {{- include "ett-base-helm-chart.selectorLabels" $ | nindent 8 }}
-        component: {{ .name }}
+        {{- include "eo-base-helm-chart.selectorLabels" $ | nindent 8 }}
+        component: {{ $key }}
     spec:
-      {{- include "ett-base-helm-chart.podTemplate" (dict "root" $ "deployment" .) | nindent 6 }}
+      {{- include "eo-base-helm-chart.podTemplate" (dict "root" $ "name" $key "deployment" $value) | nindent 6 }}
 {{- end }}
