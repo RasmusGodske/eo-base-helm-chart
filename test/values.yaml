@@ -8,6 +8,7 @@ envSecrets:
 deployments:
   test:
     replicaCount: 1
+    command: "bash"
     args: "exit $([ ! -z $TEST_SECRET ] && [ $TEST_SECRET == 'test-value2' ])"
     env: {}
     image:
