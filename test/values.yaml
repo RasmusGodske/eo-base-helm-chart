@@ -9,7 +9,7 @@ deployments:
   test:
     replicaCount: 1
     command: "exit"
-    args: "$([ ! -z $TEST_SECRET ] && [ $TEST_SECRET == 'test-value2' ])"
+    args: "$([ ! -z $TEST_SECRET ] && [ $TEST_SECRET == 'test-value' ])"
     env: {}
     image:
       repository: "ubuntu"
