@@ -19,5 +19,5 @@ spec:
         {{- include "ett-base-helm-chart.selectorLabels" $ | nindent 8 }}
         component: {{ .name }}
     spec:
-      {{- template "ett-base-helm-chart.podTemplate" (dict "root" $ "deployment" .) | nindent 6 }}
+      {{- include "ett-base-helm-chart.podTemplate" (dict "root" $ "deployment" .) | nindent 6 }}
 {{- end }}
