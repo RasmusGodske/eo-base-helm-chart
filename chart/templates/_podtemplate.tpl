@@ -1,4 +1,4 @@
-{{- define "ett-base-helm-chart.podTemplate" }}
+{{- define "ett-base-helm-chart.podTemplate" -}}
 containers:
   - name: {{ .root.Chart.Name }}-{{ .name }}
     image: "{{ .deployment.image.repository }}:{{ .deployment.image.tag }}"
