@@ -3,12 +3,12 @@ env: {}
 envSecrets:
   TEST_SECRET:
     secretName: test
-    key: test
+    key: test-key
 
 deployments:
   - name: test
     replicaCount: 1
-    args: "[ ! -z $TEST_SECRET ] && [ $TEST_SECRET == test ]"
+    args: "[ ! -z $TEST_SECRET ] && [ $TEST_SECRET == test-value ]"
     env: {}
     image:
       repository: "ubuntu"

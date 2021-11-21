@@ -13,5 +13,7 @@ jobs:
         uses: helm/kind-action@v1.2.0
       - name: Install Chart
         run: helm install base chart -f test/values.yaml
+      - name: Create secret
+        run: kubectl create secret generic test --from-literal=test-key=test-value
       - name: Helm test chart
         run: helm test base --logs
