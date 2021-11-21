@@ -1,0 +1,12 @@
+{{- range .Values.deployments}}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-container-template-test"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  restartPolicy: Never
+  {{ template "ett-base-helm-chart.podTemplate" . }}
+{{- end }}
