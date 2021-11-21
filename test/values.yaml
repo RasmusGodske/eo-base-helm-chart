@@ -6,7 +6,7 @@ envSecrets:
     key: test-key
 
 deployments:
-  - name: test
+  test:
     replicaCount: 1
     args: "[ ! -z $TEST_SECRET ] && [ $TEST_SECRET == test-value ]"
     env: {}
