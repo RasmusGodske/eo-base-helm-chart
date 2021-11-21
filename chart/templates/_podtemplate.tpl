@@ -1,6 +1,6 @@
-{{- define "ett-base-helm-chart.podTemplate" -}}
+{{- define "eo-base-helm-chart.podTemplate" -}}
 containers:
-  - name: {{ .root.Chart.Name }}-{{ .deployment.name }}
+  - name: {{ .root.Chart.Name }}-{{ .name }}
     image: "{{ .deployment.image.repository }}:{{ .deployment.image.tag }}"
     imagePullPolicy: {{ .deployment.image.pullPolicy }}
     {{- if .deployment.command }}

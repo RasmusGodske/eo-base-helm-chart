@@ -1,4 +1,4 @@
-{{- range .Values.deployments}}
+{{- range $key, $value := .Values.deployments}}
 ---
 apiVersion: v1
 kind: Pod
@@ -8,5 +8,5 @@ metadata:
     "helm.sh/hook": test
 spec:
   restartPolicy: Never
-  {{- include "ett-base-helm-chart.podTemplate" (dict "root" $ "deployment" .) | nindent 2 }}
+  {{- include "eo-base-helm-chart.podTemplate" (dict "root" $ "name" $key "deployment" $value) | nindent 2 }}
 {{- end }}
