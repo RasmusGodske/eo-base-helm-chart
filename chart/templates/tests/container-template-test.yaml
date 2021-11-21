@@ -8,5 +8,5 @@ metadata:
     "helm.sh/hook": test
 spec:
   restartPolicy: Never
-  {{ template "ett-base-helm-chart.podTemplate" $ }}
+  {{ template "ett-base-helm-chart.podTemplate" (dict "root" $ "deployment" .) }}
 {{- end }}

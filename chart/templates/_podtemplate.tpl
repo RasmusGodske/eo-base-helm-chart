@@ -1,19 +1,19 @@
 {{- define "ett-base-helm-chart.podTemplate" }}
       containers:
-        - name: {{ $.Chart.Name }}-{{ .name }}
-          image: "{{ .image.repository }}:{{ .image.tag }}"
-          imagePullPolicy: {{ .image.pullPolicy }}
-          {{- if .command }}
-          command: [{{ .command | quote }}]
-          {{- if .args }}
-          args: [{{ .args | quote }}]
+        - name: {{ .root.Chart.Name }}-{{ .name }}
+          image: "{{ .deployment.image.repository }}:{{ .deployment.image.tag }}"
+          imagePullPolicy: {{ .deployment.image.pullPolicy }}
+          {{- if .deployment.command }}
+          command: [{{ .deployment.command | quote }}]
+          {{- if .deployment.args }}
+          args: [{{ .deployment.args | quote }}]
           {{- end}}
           {{- end}}
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
-          {{- if .probes }}
+          {{- if .deployment.probes }}
           livenessProbe:
             httpGet:
               path: /health
@@ -23,22 +23,22 @@
               path: /health
               port: http
           {{- end }}
-          {{- if (or .env $.env $.envSecrets) }}
+          {{- if (or .deployment.env .root.Values.env .root.Values.envSecrets) }}
           env:
-          {{- if $.env}}
-          {{- range $name, $value := $.env }}
+          {{- if .root.Values.env}}
+          {{- range $name, $value := .root.Values.env }}
             - name: {{ $name }}
               value: {{ $value | quote }}
           {{- end}}
           {{- end}}
-          {{- if .env}}
-          {{- range $name, $value := .env }}
+          {{- if .deployment.env}}
+          {{- range $name, $value := .deployment.env }}
             - name: {{ $name }}
               value: {{ $value | quote }}
           {{- end}}
           {{- end}}
-          {{- if $.envSecrets}}
-          {{- range $name, $value := $.envSecrets }}
+          {{- if .root.Values.envSecrets}}
+          {{- range $name, $value := .root.Values.envSecrets }}
           - name: {{ $name }}
             valueFrom:
               secretKeyRef:
