@@ -8,7 +8,7 @@ envSecrets:
 deployments:
   test:
     replicaCount: 1
-    args: "[ ! -z $TEST_SECRET ] && [ $TEST_SECRET == test-value ]"
+    args: "[ ! -z $TEST_SECRET ] && [ $TEST_SECRET == 'test-value2' ]"
     env: {}
     image:
       repository: "ubuntu"
