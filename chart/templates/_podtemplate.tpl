@@ -47,4 +47,9 @@ containers:
     {{- end}}
     {{- end}}
     {{- end}}
+    {{- if .deployment.spec }}
+    {{- with .deployment.spec }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- end }}
 {{ end -}}

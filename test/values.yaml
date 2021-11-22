@@ -8,11 +8,14 @@ envSecrets:
 deployments:
   test:
     replicaCount: 1
-    command: "exit"
-    args: "$([ ! -z $TEST_SECRET ] && [ $TEST_SECRET == 'test-value' ])"
+    command: "/bin/bash"
+    args: "/scripts/test-secret-env-var"
     env: {}
     image:
       repository: "ubuntu"
       tag: "latest"
       pullPolicy: Always
-
+    spec:
+      volumeMounts:
+        - name: scripts-vol
+          mountPath: /scripts

@@ -9,4 +9,17 @@ metadata:
 spec:
   restartPolicy: Never
   {{- include "eo-base-helm-chart.podTemplate" (dict "root" $ "name" $key "deployment" $value) | nindent 2 }}
+  volumes:
+    - name: scripts-vol
+      configMap:
+        name: scripts-configmap
 {{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scripts-configmap
+  annotations:
+    "helm.sh/hook": test
+data:
+{{ (.Files.Glob "scripts/*.sh").AsConfig | indent 2 }}
