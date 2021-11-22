@@ -1,0 +1,27 @@
+env: {}
+
+envSecrets:
+  TEST_SECRET:
+    secretName: test
+    key: test-key
+
+deployments:
+  test:
+    replicaCount: 1
+    command: "/bin/bash"
+    args: "/scripts/test-secret-env-var.sh"
+    env: {}
+    image:
+      repository: "ubuntu"
+      tag: "latest"
+      pullPolicy: Always
+    containerSpec:
+      volumeMounts:
+        - name: scripts-vol
+          mountPath: /scripts
+    podSpec:
+      volumes:
+        - name: scripts-vol
+          configMap:
+            name: scripts-configmap
+

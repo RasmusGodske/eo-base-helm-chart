@@ -19,44 +19,5 @@ spec:
         {{- include "eo-base-helm-chart.selectorLabels" $ | nindent 8 }}
         component: {{ $key }}
     spec:
-      containers:
-        - name: {{ $.Chart.Name }}-{{ $key }}
-          image: "{{ $value.image.repository }}:{{ $value.image.tag }}"
-          imagePullPolicy: {{ $value.image.pullPolicy }}
-          {{- if $value.command }}
-          command: [{{ $value.command | quote }}]
-          {{- if $value.args }}
-          args: [{{ $value.args | quote }}]
-          {{- end}}
-          {{- end}}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          {{- if $value.probes }}
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: http
-          {{- end }}
-          {{- if (or $value.env $.env) }}
-          env:
-          {{- if $.env}}
-          {{- range $key, $value := $.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-          {{- end}}
-          {{- end}}
-          {{- if $value.env}}
-          {{- range $key, $value := $value.env }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-          {{- end}}
-          {{- end}}
-          {{- end}}
+      {{- include "eo-base-helm-chart.podTemplate" (dict "root" $ "name" $key "deployment" $value) | nindent 6 }}
 {{- end }}
-

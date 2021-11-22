@@ -1,0 +1,21 @@
+{{- if .Values.testFramework.enabled  }}
+{{- range $key, $value := .Values.deployments}}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "eo-base-helm-chart.fullname" $ }}-container-template-test
+  annotations:
+    "helm.sh/hook": test
+spec:
+  restartPolicy: Never
+  {{- include "eo-base-helm-chart.podTemplate" (dict "root" $ "name" $key "deployment" $value) | nindent 2 }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scripts-configmap
+data:
+{{ (.Files.Glob "scripts/*.sh").AsConfig | indent 2 }}
+{{- end }}
