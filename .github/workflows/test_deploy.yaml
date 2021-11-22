@@ -12,7 +12,7 @@ jobs:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.2.0
       - name: Install Chart
-        run: helm install base chart -f test/values.yaml
+        run: helm install base chart -f test/values.yaml --set testFramework.enabled=true
       - name: Create secret
         run: kubectl create secret generic test --from-literal=test-key=test-value
       - name: Helm test chart
