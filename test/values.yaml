@@ -9,7 +9,7 @@ deployments:
   test:
     replicaCount: 1
     command: "/bin/bash"
-    args: "/scripts/test-secret-env-var"
+    args: "/scripts/test-secret-env-var.sh"
     env: {}
     image:
       repository: "ubuntu"
