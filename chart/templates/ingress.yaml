@@ -29,12 +29,37 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "eo-base-helm-chart.fullname" . }}
+  name: {{ include "eo-base-helm-chart.fullname" . }}-http
   labels:
     {{- include "eo-base-helm-chart.labels" . | nindent 4 }}
 spec:
   entryPoints:
     - web
+  routes:
+  - match: {{join " && " $matchRules}}
+    kind: Rule
+    services:
+    - name: {{ include "eo-base-helm-chart.fullname" . }}
+      port: {{ .Values.ingress.servicePort }}
+    {{- if .Values.ingress.middlewares }}
+    middlewares:
+      {{- range .Values.ingress.httpMiddelwares }}
+      - name: {{ . }} 
+      {{- end }}
+      {{- range .Values.ingress.middlewares }}
+      - name: {{ . }}
+      {{- end }}
+    {{- end }}
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "eo-base-helm-chart.fullname" . }}-https
+  labels:
+    {{- include "eo-base-helm-chart.labels" . | nindent 4 }}
+spec:
+  entryPoints:
     - websecure
   routes:
   - match: {{join " && " $matchRules}}
@@ -47,5 +72,9 @@ spec:
       {{- range .Values.ingress.middlewares }}
       - name: {{ . }}
       {{- end }}
+    {{- end }}
+    {{- if .Values.ingress.tlsSecretName }}
+    tls:
+      secretName: {{ .Values.ingress.tlsSecretName }}
     {{- end }}
 {{- end }}
