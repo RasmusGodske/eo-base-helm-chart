@@ -47,9 +47,14 @@ containers:
     {{- end}}
     {{- end}}
     {{- end}}
-    {{- if .deployment.spec }}
-    {{- with .deployment.spec }}
+    {{- if .deployment.containerSpec }}
+    {{- with .deployment.containerSpec }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- end }}
+{{- if .deployment.podSpec }}
+{{- with .deployment.podSpec }}
+{{- toYaml . }}
+{{- end }}
+{{- end }}
 {{ end -}}

@@ -15,7 +15,13 @@ deployments:
       repository: "ubuntu"
       tag: "latest"
       pullPolicy: Always
-    spec:
+    containerSpec:
       volumeMounts:
         - name: scripts-vol
           mountPath: /scripts
+    podSpec:
+      volumes:
+        - name: scripts-vol
+          configMap:
+            name: scripts-configmap
+
