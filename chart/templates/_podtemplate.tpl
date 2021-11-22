@@ -54,7 +54,7 @@ containers:
     {{- end }}
 {{- if .deployment.podSpec }}
 {{- with .deployment.podSpec }}
-{{- toYaml . }}
+{{- toYaml . | nindent 0}}
 {{- end }}
 {{- end }}
 {{ end -}}
