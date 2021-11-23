@@ -77,7 +77,7 @@ spec:
     middlewares:
       {{- range .Values.ingress.middlewares }}
       - name: {{ .name }}
-        {{- if .namespace -}}
+        {{- if .namespace }}
         namespace: {{ .namespace }} 
         {{- end }}
       {{- end }}
