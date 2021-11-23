@@ -41,7 +41,7 @@ spec:
     services:
     - name: {{ include "eo-base-helm-chart.fullname" . }}
       port: {{ .Values.ingress.servicePort }}
-    {{- if .Values.ingress.httpMiddelwares || .Values.ingress.middlewares }}
+    {{- if or .Values.ingress.httpMiddelwares .Values.ingress.middlewares }}
     middlewares:
       {{- range .Values.ingress.httpMiddelwares }}
       - name: {{ . }} 
