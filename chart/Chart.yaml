@@ -3,4 +3,4 @@ name: eo-base-helm-chart
 description: A Helm chart for Kubernetes
 
 type: application
-version: v0.3.3
+version: v0.3.4

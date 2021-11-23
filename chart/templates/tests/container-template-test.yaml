@@ -1,4 +1,4 @@
-{{- if .Values.testFramework.enabled  }}
+{{- if .Values.testFramework  }}
 {{- range $key, $value := .Values.deployments}}
 ---
 apiVersion: v1
