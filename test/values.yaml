@@ -24,4 +24,3 @@ deployments:
         - name: scripts-vol
           configMap:
             name: scripts-configmap
-

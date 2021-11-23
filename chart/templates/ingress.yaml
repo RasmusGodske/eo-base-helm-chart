@@ -44,10 +44,16 @@ spec:
     {{- if or .Values.ingress.httpMiddelwares .Values.ingress.middlewares }}
     middlewares:
       {{- range .Values.ingress.httpMiddelwares }}
-      - name: {{ . }} 
+      - name: {{ .name }} 
+        {{- if .namespace }}
+        namespace: {{ .namespace }} 
+        {{- end }}
       {{- end }}
       {{- range .Values.ingress.middlewares }}
-      - name: {{ . }}
+      - name: {{ .name }}
+        {{- if .namespace }}
+        namespace: {{ .namespace }} 
+        {{- end }}
       {{- end }}
     {{- end }}
 
@@ -70,7 +76,10 @@ spec:
     {{- if .Values.ingress.middlewares }}
     middlewares:
       {{- range .Values.ingress.middlewares }}
-      - name: {{ . }}
+      - name: {{ .name }}
+        {{- if .namespace -}}
+        namespace: {{ .namespace }} 
+        {{- end }}
       {{- end }}
     {{- end }}
     {{- if .Values.ingress.tlsSecretName }}
