@@ -1,12 +1,12 @@
 env: {}
 
 randomSecret:
-  testRandom:
+  test-random:
     - test-secret-1
 
 envSecrets:
   TEST_RANDOM_SECRET:
-    secretName: testRandom
+    secretName: test-random
     key: test-secret-1
   TEST_SECRET:
     secretName: test
