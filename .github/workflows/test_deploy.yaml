@@ -12,7 +12,7 @@ jobs:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.2.0
       - name: Install SealedSecrets
-        run: helm install --repo https://github.com/bitnami-labs/sealed-secrets/tree/v0.17.0 sealed-secrets helm/sealed-secrets
+        run: helm install sealed-secrets https://github.com/bitnami-labs/sealed-secrets/releases/download/helm-v1.16.1/sealed-secrets-1.16.1.tgz
       - name: Install Chart
         run: helm install base chart -f test/values.yaml --set testFramework=true
       - name: Create secret
