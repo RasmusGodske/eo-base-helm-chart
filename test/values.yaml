@@ -1,6 +1,13 @@
 env: {}
 
+randomSecret:
+  test_random_secret_1:
+    - test-secret-1
+
 envSecrets:
+  TEST_RANDOM_SECRET:
+    secretName: test_random_secret_1
+    key: test-secret-1
   TEST_SECRET:
     secretName: test
     key: test-key
