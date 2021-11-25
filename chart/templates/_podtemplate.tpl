@@ -39,11 +39,11 @@ containers:
     {{- end}}
     {{- if .root.Values.envSecrets}}
     {{- range $name, $value := .root.Values.envSecrets }}
-    - name: {{ $name }}
-      valueFrom:
-        secretKeyRef:
-          name: {{ $value.secretName }}
-          key: {{ $value.key }}
+      - name: {{ $name }}
+        valueFrom:
+          secretKeyRef:
+            name: {{ $value.secretName }}
+            key: {{ $value.key }}
     {{- end}}
     {{- end}}
     {{- end}}

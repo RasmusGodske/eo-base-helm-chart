@@ -14,7 +14,7 @@ jobs:
       - name: Install SealedSecrets
         run: helm install sealed-secrets https://github.com/bitnami-labs/sealed-secrets/releases/download/helm-v1.16.1/sealed-secrets-1.16.1.tgz
       - name: Install Chart
-        run: helm install base chart -f test/values.yaml --set testFramework=true
+        run: helm install base chart -f test/values.yaml --set testFramework=true --debug
       - name: Create secret
         run: kubectl create secret generic test --from-literal=test-key=test-value
       - name: Helm test chart
