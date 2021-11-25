@@ -82,8 +82,8 @@ spec:
         {{- end }}
       {{- end }}
     {{- end }}
-    {{- if .Values.ingress.tlsSecretName }}
-    tls:
-      secretName: {{ .Values.ingress.tlsSecretName }}
-    {{- end }}
+  {{- if .Values.ingress.tlsSecretName }}
+  tls:
+    secretName: {{ .Values.ingress.tlsSecretName }}
+  {{- end }}
 {{- end }}
