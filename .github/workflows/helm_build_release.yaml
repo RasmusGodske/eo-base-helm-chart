@@ -10,7 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: Energinet-DataHub/.github/.github/actions/helm-release-chart@helm_releases_action
+      - name: Release helm chart
+        uses: Energinet-DataHub/.github/.github/actions/helm-release-chart@helm_releases_action
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           chart_folder: chart
