@@ -7,13 +7,6 @@ on:
       - main
 
 jobs:
-  helm_check_version:
-    name: Helm chart check version
-    uses: Energinet-DataHub/.github/.github/workflows/version-increment-check.yaml@main
-    with:
-      yaml_file: chart/Chart.yaml
-      yaml_path: version
-
   helm-release:
     needs: [helm_check_version]
     runs-on: ubuntu-latest
