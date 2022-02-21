@@ -1,8 +1,10 @@
 name: Build and release helm chart
 
 on:
+  pull_request: {}
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   helm_check_version:
