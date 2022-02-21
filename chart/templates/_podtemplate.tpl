@@ -52,7 +52,9 @@ containers:
     {{- range $name, $value := .root.Values.configMaps }}
       - name: {{ $name }}
         mountPath: {{ $value.mountPath }}
+        {{- if $value.readOnly }}
         readOnly: {{ $value.readOnly }}
+        {{- end }}
     {{- end }}
     {{- end }}
     {{- if .deployment.containerSpec }}
