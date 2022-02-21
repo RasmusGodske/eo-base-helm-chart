@@ -16,5 +16,5 @@ jobs:
           dispatch_token: ${{ secrets.ACCESS_TOKEN }}
           release_token: ${{ secrets.ACCESS_TOKEN }}
           chart_folder: chart
-          chart_repository: Energinet-DataHub/helm-charts
+          chart_repository: RasmusGodske/eo-base-helm-chart
           chart_version: v0.5.1
