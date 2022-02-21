@@ -47,6 +47,16 @@ containers:
     {{- end}}
     {{- end}}
     {{- end}}
+    {{- if .root.Values.configMaps}}
+    volumeMounts:
+    {{- range $name, $value := .root.Values.configMaps }}
+      - name: {{ $name }}
+        mountPath: {{ $value.mountPath }}
+        {{- if $value.readOnly }}
+        readOnly: {{ $value.readOnly }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
     {{- if .deployment.containerSpec }}
     {{- with .deployment.containerSpec }}
     {{- toYaml . | nindent 4 }}
@@ -55,6 +65,14 @@ containers:
 {{- if .deployment.podSpec }}
 {{- with .deployment.podSpec }}
 {{- toYaml . | nindent 0}}
+{{- end }}
+{{- end }}
+{{- if .root.Values.configMaps}}
+{{- range $name, $value := .root.Values.configMaps }}
+volumes:
+  - name: {{ $name }}
+    configMap:
+      name: {{ $name }}
 {{- end }}
 {{- end }}
 {{ end -}}
