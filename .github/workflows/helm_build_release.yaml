@@ -5,6 +5,13 @@ on:
     branches: [ main ]
 
 jobs:
+  helm_check_version:
+    name: Helm chart check version
+    uses: Energinet-DataHub/.github/.github/workflows/version-increment-check.yaml@main
+    with:
+      yaml_file: chart/Chart.yaml
+      yaml_path: version
+
   helm-release:
     runs-on: ubuntu-latest
     steps:
