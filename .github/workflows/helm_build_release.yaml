@@ -13,6 +13,7 @@ jobs:
       yaml_path: version
 
   helm-release:
+    needs: [helm_check_version]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
