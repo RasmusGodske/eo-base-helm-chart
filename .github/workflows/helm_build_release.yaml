@@ -1,11 +1,8 @@
 name: Build and release helm chart
 
 on:
-  pull_request: {}
   push:
-    branches:
-      - main
-
+    branches: [ main ]
 
 jobs:
   helm-release:
@@ -19,5 +16,5 @@ jobs:
           dispatch_token: ${{ secrets.ACCESS_TOKEN }}
           release_token: ${{ secrets.ACCESS_TOKEN }}
           chart_folder: chart
-          chart_repository: RasmusGodske/helm-charts
+          chart_repository: Energinet-DataHub/helm-charts
           chart_version: ${{ steps.get_semver.outputs.semver }}
