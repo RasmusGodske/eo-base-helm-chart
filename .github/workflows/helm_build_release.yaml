@@ -11,8 +11,6 @@ jobs:
   helm-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
       - name: Release helm chart
         uses: Energinet-DataHub/.github/.github/actions/helm-release-chart@5.0.0
         with:
