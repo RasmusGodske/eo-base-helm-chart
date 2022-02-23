@@ -24,7 +24,7 @@ jobs:
           yaml_path: version
 
       - name: Release helm chart
-        uses: Energinet-DataHub/.github/.github/actions/helm-release-chart@5.0.0
+        uses: Energinet-DataHub/.github/.github/actions/helm-release-chart@main
         with:
           release_token: ${{ secrets.RELEASE_CHART_TOKEN }}
           dispatch_token: ${{ secrets.RELEASE_CHART_TOKEN }}
