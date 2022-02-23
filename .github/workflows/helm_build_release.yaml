@@ -9,17 +9,9 @@ on:
 
 jobs:
   helm-release:
-    needs: [helm_check_version]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Get chart version
-        id: get_semver
-        uses: Energinet-DataHub/.github/.github/actions/get-semver@main
-        with:
-          yaml_file: chart/Chart.yaml
-          yaml_path: version
 
       - name: Release helm chart
         uses: Energinet-DataHub/.github/.github/actions/helm-release-chart@5.0.0

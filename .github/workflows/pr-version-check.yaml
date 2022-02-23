@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Container Version Check
+name: Helm chart version Check
 on:
   pull_request:
     branches: [ main ]
