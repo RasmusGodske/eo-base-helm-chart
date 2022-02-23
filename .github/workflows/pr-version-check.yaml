@@ -31,8 +31,8 @@ jobs:
       steps:
         - uses: actions/checkout@v2
           with:
-            path: ${{ inputs.git_checkout_folder }}
-            ref: 'main'
+            path: git-main
+            ref: 'test/ci-test'
 
         - name: Get chart version
           id: get_chart_version
@@ -46,7 +46,7 @@ jobs:
           shell: bash
           run: |
             cd git-main
-            if ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+            if ${{ github.event_name == 'push' && github.ref_name == 'test/ci-test' }}
             then
               echo "::set-output name=version::${{ steps.get_chart_version.outputs.result }}"
             elif ${{ github.event_name == 'pull_request' }}
