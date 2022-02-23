@@ -27,6 +27,7 @@ jobs:
   #     yaml_file: chart/Chart.yaml
       # yaml_path: version
     helm_check_version_raw:
+      runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
           with:
