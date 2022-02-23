@@ -16,43 +16,10 @@ name: Helm chart version Check
 on:
   pull_request:
     branches: [ main ]
-  push:
-    branches:
-      - main
 jobs:
-  # helm_check_version:
-  #   name: Helm chart check version
-  #   uses: Energinet-DataHub/.github/.github/workflows/version-increment-check.yaml@main
-  #   with:
-  #     yaml_file: chart/Chart.yaml
-      # yaml_path: version
-    helm_check_version_raw:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-          with:
-            path: git-main
-            ref: 'test/ci-test'
-
-        - name: Get chart version
-          id: get_chart_version
-          uses: Energinet-DataHub/.github/.github/actions/yaml-get@main
-          with:
-            yaml_file: git-main/chart/Chart.yaml
-            yaml_path: version
-
-        - name: Generate semver
-          id: generate_semver
-          shell: bash
-          run: |
-            cd git-main
-            if ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-            then
-              echo "::set-output name=version::${{ steps.get_chart_version.outputs.result }}"
-            elif ${{ github.event_name == 'pull_request' }}
-            then
-              echo "::set-output name=version::${{ steps.get_chart_version.outputs.result }}-pr.${{ github.event.pull_request.number }}.$(git rev-parse --short ${{ github.sha }})"
-            else
-              echo Not supported on push to branches other than main
-              exit 1
-            fi
+  helm_check_version:
+    name: Helm chart check version
+    uses: Energinet-DataHub/.github/.github/workflows/version-increment-check.yaml@main
+    with:
+      yaml_file: chart/Chart.yaml
+      yaml_path: version
