@@ -24,4 +24,4 @@ jobs:
           release_token: ${{ secrets.ACCESS_TOKEN }}
           chart_folder: chart
           chart_repository: Energinet-DataHub/helm-charts
-          chart_version: ${{ steps.get_chart_version.outputs.semver }}
+          chart_version: ${{ steps.get_chart_version.outputs.result }}
