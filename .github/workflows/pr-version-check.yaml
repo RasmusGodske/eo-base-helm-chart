@@ -16,6 +16,12 @@ name: Helm chart version Check
 on:
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '.devcontainer/**'
+      - '.github/**'
+      - '.test/**'
+      - 'README.md'
+      - 'LICENSE'
 jobs:
   helm_check_version:
     name: Helm chart check version
