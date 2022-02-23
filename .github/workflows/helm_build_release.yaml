@@ -3,6 +3,12 @@ name: Build and release helm chart
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - '.devcontainer/**'
+      - '.github/**'
+      - '.test/**'
+      - 'README.md'
+      - 'LICENSE'
 
 jobs:
   helm-release:
