@@ -5,7 +5,6 @@ on:
     branches: [ main ]
     paths-ignore:
       - '.devcontainer/**'
-      - '.github/**'
       - '.test/**'
       - 'README.md'
       - 'LICENSE'
