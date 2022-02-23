@@ -1,6 +1,5 @@
 name: Build and release helm chart
 
-
 on:
   push:
     branches: [ main ]
